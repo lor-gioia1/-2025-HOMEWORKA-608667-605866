@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import it.uniroma3.diadia.Partita;
+import it.uniroma3.diadia.IOConsole;
 import it.uniroma3.diadia.attrezzi.Attrezzo;
 
 class StanzaTest {
@@ -14,7 +15,8 @@ class StanzaTest {
 	
 	@BeforeEach
 	public void setUp() throws Exception{
-		this.partita=new Partita();
+		IOConsole io=new IOConsole();
+		this.partita=new Partita(io);
 		this.stanza=partita.getLabirinto().getStanzaCorrente();
 		this.attrezzo=new Attrezzo("spada",2);
 	}

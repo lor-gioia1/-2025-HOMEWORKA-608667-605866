@@ -9,7 +9,7 @@ class LabirintoTest {
 	private Labirinto labirinto;
 	
 	@BeforeEach
-	private void setUp() {
+	public void setUp() {
 		this.labirinto=new Labirinto();
 	}
 	

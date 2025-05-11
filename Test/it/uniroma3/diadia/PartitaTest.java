@@ -11,7 +11,8 @@ class PartitaTest {
 	
 	@BeforeEach
 	public void setUp() throws Exception{
-		this.partita=new Partita();
+		IO io=new IOConsole();
+		this.partita=new Partita(io);
 	}
 
 	@Test

@@ -1,52 +1,42 @@
 package it.uniroma3.diadia;
 
+import java.util.*;
+
 public class IOSimulator implements IO{
-	private String[] messaggiStampati;
-	private String[] istruzioni;
-	private int contatore1;
-	private int contatore2;
+	private List<String> messaggiStampati;
+	private List<String> istruzioni;
+	private Iterator<String>it1;
 	
 	public IOSimulator(String[] input) {
-		this.istruzioni=input;
-		this.messaggiStampati=new String[50];
-		contatore1=0;
-		contatore2=0;
+		this.istruzioni=new ArrayList<String>(Arrays.asList(input));
+		this.messaggiStampati=new ArrayList<String>();
+		this.it1=istruzioni.iterator();
 	}
 	
 	@Override
 	public String leggiRiga() {
-		if(contatore1 >= istruzioni.length || istruzioni[contatore1] == null)
+		if(!this.it1.hasNext())
 			return "No";
-		String a = this.istruzioni[contatore1];
-		contatore1++;
-		return a;
+		return this.it1.next();
 	}
 	
 	@Override
 	public void mostraMessaggio(String msg) {
-		if(contatore2>=messaggiStampati.length)
-			return;
-		messaggiStampati[contatore2]=msg;
-		contatore2++;
+		this.messaggiStampati.add(msg);
 	}
 	
 	public void getIstruzione () {
-		for (int i=0;i<istruzioni.length;i++) {
-			if(istruzioni[i]!=null)
-				System.out.println(istruzioni[i]+" ");
+		for (String s : this.istruzioni) {
+			if(s!=null)
+				System.out.println(s+" ");
 		}
 	}
 	
-//	public void setIstruzione(String cmd) {
-//		if(istruzioni.length==0||contatore3>=istruzioni.length)
-//			return;
-//		istruzioni[contatore3]=cmd;
-//		contatore3++;
-//	}
-	
 	public String getMessaggio (int indice) {
-		if (indice < 0 || indice >= messaggiStampati.length || messaggiStampati[indice] == null)
+		if (indice < 0 || indice >= messaggiStampati.size()||this.messaggiStampati.get(indice)==null)
 			return "Nessun messaggio";
-		return messaggiStampati[indice];
+		return this.messaggiStampati.get(indice);
 	}
+	
+	public Scanner getScan() {return null;}
 }

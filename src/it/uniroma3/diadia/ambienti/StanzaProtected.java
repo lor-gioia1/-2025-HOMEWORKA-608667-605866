@@ -2,6 +2,7 @@
 package it.uniroma3.diadia.ambienti;
 
 import it.uniroma3.diadia.attrezzi.Attrezzo;
+import java.util.*;
 
 /**
  * Classe Stanza - una stanza in un gioco di ruolo.
@@ -21,7 +22,7 @@ public class StanzaProtected {
 
 	private String nome;
 
-	protected Attrezzo[] attrezzi;
+	protected Set<Attrezzo> attrezzi;
 	protected int numeroAttrezzi;
 
 	private Stanza[] stanzeAdiacenti;
@@ -36,10 +37,10 @@ public class StanzaProtected {
 	public StanzaProtected(String nome) {
 		this.nome = nome;
 		this.numeroStanzeAdiacenti = 0;
-		this.numeroAttrezzi = 0;
+		this.attrezzi = new HashSet<Attrezzo>();
+		this.numeroAttrezzi = this.attrezzi.size();
 		this.direzioni = new String[NUMERO_MASSIMO_DIREZIONI];
 		this.stanzeAdiacenti = new Stanza[NUMERO_MASSIMO_DIREZIONI];
-		this.attrezzi = new Attrezzo[NUMERO_MASSIMO_ATTREZZI];
 	}
 
 	/**
@@ -99,7 +100,7 @@ public class StanzaProtected {
 	 * Restituisce la collezione di attrezzi presenti nella stanza.
 	 * @return la collezione di attrezzi nella stanza.
 	 */
-	public Attrezzo[] getAttrezzi() {
+	public Set<Attrezzo> getAttrezzi() {
 		return this.attrezzi;
 	}
 
@@ -109,9 +110,8 @@ public class StanzaProtected {
 	 * @return true se riesce ad aggiungere l'attrezzo, false atrimenti.
 	 */
 	public boolean addAttrezzo(Attrezzo attrezzo) {
-		if (this.numeroAttrezzi < NUMERO_MASSIMO_ATTREZZI) {
-			this.attrezzi[numeroAttrezzi] = attrezzo;
-			this.numeroAttrezzi++;
+		if (this.attrezzi.size() < NUMERO_MASSIMO_ATTREZZI) {
+			this.attrezzi.add(attrezzo);
 			return true;
 		}
 		else {
@@ -132,8 +132,9 @@ public class StanzaProtected {
 			if (direzione!=null)
 				risultato.append(" " + direzione);
 		risultato.append("\nAttrezzi nella stanza: ");
-		for (int i=0;i<this.numeroAttrezzi;i++) {
-			risultato.append(attrezzi[i].toString()+" ");
+		Iterator <Attrezzo> it=this.attrezzi.iterator();
+		while(it.hasNext()) {
+			risultato.append(it.next().toString()+" ");
 		}
 		return risultato.toString();
 	}
@@ -145,8 +146,8 @@ public class StanzaProtected {
 	public boolean hasAttrezzo(String nomeAttrezzo) {
 		boolean trovato;
 		trovato = false;
-		for (int i=0;i<numeroAttrezzi;i++) {
-			if (attrezzi[i].getNome().equals(nomeAttrezzo))
+		for (Attrezzo a : this.attrezzi) {
+			if (a.getNome().equals(nomeAttrezzo))
 				trovato = true;
 		}
 		return trovato;
@@ -161,9 +162,9 @@ public class StanzaProtected {
 	public Attrezzo getAttrezzo(String nomeAttrezzo) {
 		Attrezzo attrezzoCercato;
 		attrezzoCercato = null;
-		for (int i=0;i<numeroAttrezzi;i++) {
-			if (attrezzi[i].getNome().equals(nomeAttrezzo))
-				attrezzoCercato = attrezzi[i];
+		for (Attrezzo a : this.attrezzi) {
+			if (a.getNome().equals(nomeAttrezzo))
+				attrezzoCercato = a;
 		}
 		return attrezzoCercato;	
 	}
@@ -176,19 +177,10 @@ public class StanzaProtected {
 	public boolean removeAttrezzo(Attrezzo attrezzo) {
 		if(attrezzo==null)
 			return false;
-		for(int i=0;i<numeroAttrezzi;i++) {
-			if(this.attrezzi[i].getNome().equals(attrezzo.getNome())){
-				if(i==numeroAttrezzi-1)
-					attrezzi[i]=null;
-				else {
-					for(int j=i;j<numeroAttrezzi;j++)
-						attrezzi[j]=attrezzi[j+1];
-				}
-				attrezzi[numeroAttrezzi-1]=null;
-				numeroAttrezzi=numeroAttrezzi-1;
-				return true;
-			}			
-		}
+		if(this.attrezzi.contains(attrezzo)){
+			this.attrezzi.remove(attrezzo);
+			return true;
+		}			
 		return false;
 	}
 

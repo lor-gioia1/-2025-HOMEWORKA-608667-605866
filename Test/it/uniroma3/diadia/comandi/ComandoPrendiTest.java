@@ -16,7 +16,7 @@ class ComandoPrendiTest {
 	public void setUp() throws Exception{
 		IOConsole io=new IOConsole();
 		this.partita=new Partita(io);
-		this.comandoDaEseguire=new FabbricaDiComandiFisarmonica();
+		this.comandoDaEseguire=new FabbricaDiComandiRiflessiva();
 	}
 	
 	@Test
@@ -40,7 +40,7 @@ class ComandoPrendiTest {
 	
 	@Test
 	void testEseguiParametro() {
-		Comando v=this.comandoDaEseguire.costruisciComando("prendi");
+		AbstractComando v=this.comandoDaEseguire.costruisciComando("prendi");
 		v.setParametro("spada");
 		this.partita.getLabirinto().getStanzaCorrente().addAttrezzo(new Attrezzo("spada",1));
 		v.esegui(this.partita);

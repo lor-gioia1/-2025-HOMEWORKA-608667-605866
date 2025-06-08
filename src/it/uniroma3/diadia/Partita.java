@@ -25,6 +25,13 @@ public class Partita {
 		this.labirinto = new Labirinto();
 		this.io=io;
 	}
+	
+	public Partita(Labirinto labirinto, IO io){
+		this.finita = false;
+		this.giocatore = new Giocatore();
+		this.labirinto = labirinto;
+		this.io=io;
+	}
 
 	/**
 	 * Restituisce vero se e solo se la partita e' stata vinta
@@ -44,6 +51,10 @@ public class Partita {
 
 	public Labirinto getLabirinto() {
 		return this.labirinto;
+	}
+	
+	public void setLabirinto(Labirinto labirinto) {
+		this.labirinto=labirinto;
 	}
 
 	public boolean getFinita() {

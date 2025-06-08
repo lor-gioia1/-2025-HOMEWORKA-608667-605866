@@ -23,8 +23,9 @@ class StanzaTest {
 	
 	@Test
 	void testImpostaStanzaAdiacenteN1() {
-		stanza.impostaStanzaAdiacente("sud",new Stanza("Aula N1"));
-		assertEquals("Aula N1",stanza.getStanzaAdiacente("sud").getNome());
+		Stanza s=new Stanza("sala");
+		s.impostaStanzaAdiacente("sud",new Stanza("Aula N1"));
+		assertEquals("Aula N1",s.getStanzaAdiacente("sud").getNome());
 	}
 	
 	@Test
@@ -68,8 +69,9 @@ class StanzaTest {
 	
 	@Test
 	void testAddAttrezzoFalse() {
-		for(int i=1;i<10;i++) {
-			stanza.addAttrezzo(attrezzo);
+		for(int i=1;i<=9;i++) {
+			Attrezzo temp=new Attrezzo(String.valueOf(i),1); //Faccio in modo che i 10 attrezzi aggiunti abbiano nomi diversi
+			stanza.addAttrezzo(temp);
 		}
 		assertFalse(stanza.addAttrezzo(attrezzo));
 	}
@@ -102,7 +104,7 @@ class StanzaTest {
 	
 	@Test
 	void testGetAttrezzoFalse() {
-		assertNotEquals(attrezzo,stanza.getAttrezzo("martello"));
+		assertNotEquals(attrezzo,stanza.getAttrezzo("osso"));
 	}
 	
 	@Test

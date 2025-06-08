@@ -4,7 +4,7 @@ import it.uniroma3.diadia.ambienti.Stanza;
 import it.uniroma3.diadia.attrezzi.Attrezzo;
 import it.uniroma3.diadia.Partita;
 
-public class ComandoPosa implements Comando {
+public class ComandoPosa extends AbstractComando {
 
 	private String attrezzoDaPosare;
 	
@@ -15,7 +15,7 @@ public class ComandoPosa implements Comando {
 			partita.getStampa().mostraMessaggio("L'attrezzo non è presente nella borsa!");
 		}
 		else {
-			if(stanza.getNumeroAttrezzi()>10) {
+			if(stanza.getNumeroAttrezzi()>10||stanza.hasAttrezzo(attrezzoDaPosare)) {
 				partita.getStampa().mostraMessaggio("L'attrezzo non entra nella stanza!");
 			}
 			else {
@@ -35,10 +35,5 @@ public class ComandoPosa implements Comando {
 	@Override
 	public String getNome() {
 		return "posa";
-	}
-	
-	@Override
-	public String getParametro() {
-		return attrezzoDaPosare;
 	}
 }

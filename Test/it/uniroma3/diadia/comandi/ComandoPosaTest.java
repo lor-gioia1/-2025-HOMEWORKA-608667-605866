@@ -17,7 +17,7 @@ class ComandoPosaTest {
 	public void setUp() throws Exception{
 		IOConsole io=new IOConsole();
 		this.partita=new Partita(io);
-		this.comandoDaEseguire=new FabbricaDiComandiFisarmonica();
+		this.comandoDaEseguire=new FabbricaDiComandiRiflessiva();
 		this.spada=new Attrezzo ("spada",1);
 	}
 	
@@ -37,7 +37,7 @@ class ComandoPosaTest {
 	@Test
 	void testEseguiNonEntra() {
 		for(int i=0;i<=9;i++)
-			this.partita.getLabirinto().getStanzaCorrente().addAttrezzo(spada);
+			this.partita.getLabirinto().getStanzaCorrente().addAttrezzo(new Attrezzo(String.valueOf(i),1));
 		this.partita.getGiocatore().getBorsa().addAttrezzo(new Attrezzo("martello",1));
 		this.comandoDaEseguire.costruisciComando("posa martello").esegui(this.partita);
 		assertFalse(this.partita.getLabirinto().getStanzaCorrente().hasAttrezzo("martello"));
@@ -45,7 +45,7 @@ class ComandoPosaTest {
 	
 	@Test
 	void testEseguiParametro() {
-		Comando v=this.comandoDaEseguire.costruisciComando("posa");
+		AbstractComando v=this.comandoDaEseguire.costruisciComando("posa");
 		v.setParametro("spada");
 		this.partita.getGiocatore().getBorsa().addAttrezzo(spada);
 		v.esegui(this.partita);

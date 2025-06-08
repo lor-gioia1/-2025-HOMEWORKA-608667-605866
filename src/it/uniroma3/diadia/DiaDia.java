@@ -2,7 +2,9 @@
 package it.uniroma3.diadia;
 
 import it.uniroma3.diadia.comandi.FabbricaDiComandi;
-import it.uniroma3.diadia.comandi.FabbricaDiComandiFisarmonica;
+import it.uniroma3.diadia.comandi.FabbricaDiComandiRiflessiva;
+
+import it.uniroma3.diadia.ambienti.Labirinto;
 
 /**
  * Classe principale di diadia, un semplice gioco di ruolo ambientato al dia.
@@ -18,16 +20,6 @@ import it.uniroma3.diadia.comandi.FabbricaDiComandiFisarmonica;
 
 public class DiaDia {
 
-	static final private String MESSAGGIO_BENVENUTO = ""+
-			"Ti trovi nell'Universita', ma oggi e' diversa dal solito...\n" +
-			"Meglio andare al piu' presto in biblioteca a studiare. Ma dov'e'?\n"+
-			"I locali sono popolati da strani personaggi, " +
-			"alcuni amici, altri... chissa!\n"+
-			"Ci sono attrezzi che potrebbero servirti nell'impresa:\n"+
-			"puoi raccoglierli, usarli, posarli quando ti sembrano inutili\n" +
-			"o regalarli se pensi che possano ingraziarti qualcuno.\n\n"+
-			"Per conoscere le istruzioni usa il comando 'aiuto'.";
-
 	private Partita partita;
 	private IO io;
 
@@ -36,13 +28,20 @@ public class DiaDia {
 		this.io=io;
 	}
 
+	public DiaDia(Labirinto labirinto, IO io) {
+		this.partita = new Partita(labirinto, io);
+		this.io=io;
+	}
+
 	public void gioca() {
 		String istruzione; 
-		io.mostraMessaggio(MESSAGGIO_BENVENUTO);		
+		io.mostraMessaggio(Stringhe.Iniziale.getStringa());
+
 		do	{
 			istruzione = io.leggiRiga();
 		}
 		while (!processaIstruzione(istruzione));
+
 	}   
 
 	/**
@@ -51,23 +50,35 @@ public class DiaDia {
 	 * @return true se l'istruzione e' eseguita e il gioco continua, false altrimenti
 	 */
 	public boolean processaIstruzione(String istruzione) {
-		FabbricaDiComandi comandoDaEseguire=new FabbricaDiComandiFisarmonica();
-		comandoDaEseguire.costruisciComando(istruzione).esegui(this.partita);;
-		if (this.partita.isFinita()) {
-			if (this.partita.vinta()) {
-				io.mostraMessaggio("Hai vinto!");
-			}
-			else {
-				io.mostraMessaggio("Hai perso!");
-			}
+		if(istruzione.equals("No")&&this.partita.getLabirinto().getStanzaCorrente().getNome().equals(this.partita.getLabirinto().getStanzaVincente().getNome())) {
+			io.mostraMessaggio("Heyyyy");
+			io.mostraMessaggio(Stringhe.Vittoria.getStringa());
 			return true;
-		}   
-		return false;
+		}
+		else {
+			FabbricaDiComandi comandoDaEseguire=new FabbricaDiComandiRiflessiva();
+			comandoDaEseguire.costruisciComando(istruzione).esegui(this.partita);;
+			if (this.partita.isFinita()) {
+				if (this.partita.vinta()) {
+					io.mostraMessaggio(Stringhe.Vittoria.getStringa());
+				}
+				else {
+					io.mostraMessaggio(Stringhe.Sconfitta.getStringa());
+				}
+				return true;
+			}   
+			return false;
+		}
 	}
 
 	public static void main(String[] argc) {
-		IO io=new IOConsole();
-		DiaDia gioco = new DiaDia(io);
-		gioco.gioca();
+		try {
+			IO io=new IOConsole();
+			DiaDia gioco = new DiaDia(io);
+			gioco.gioca();
+			io.getScan().close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 }
